@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0/css/bootstrap.min.css" integrity="sha512-XWTTruHZEYJsxV3W/lSXG1n3Q39YIWOstqvmFsdNEEQfHoZ6vm6E9GK2OrF6DSJSpIbRbi+Nn0WDPID9O7xB2Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+    integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.all.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.1/dist/sweetalert2.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js" integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <title>API RSS</title>
+</head>
+
+<body>
+  <header>
+    <h1> <b>NOTICIAS RSS</b> </h1>
+    <span>
+      <input type="search" placeholder="Search" id="search" class="search" />
+      <input type="button" id="btnActualizar" value="Actualizar noticias" class="btnInteraccion" />
+      <input type="button" id="btnGuardar" value="Agregar RSS" class="btnInteraccion" data-bs-toggle="modal" data-bs-target="#exampleModal"/>
+    </span>
+
+  </header>
+
+  <label class="custom-select" for="styledSelect1">
+    <select id="styledSelect1" name="options">
+      <option value="fecha">Filtrar por:</option>
+      <option value="fecha">Fecha</option>
+      <option value="url">Url</option>
+      <option value="titulo">Titulo</option>
+    </select>
+  </label>
+
+  <main id="main"></main>
+  <div id="botones" class="botones">
+    <a href="#" class='move moveLeft' id="anterior">Anterior</a> 
+    <a href="#" class='move moveRight' id="siguiente">Siguiente</a>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Agregar RSS</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="bodyModal" >
+          <input type="text" placeholder="Ingrese RSS" id="rss" class="rss" name="title[]" aria-invalid="true"/>
+          <div id="nuevoInput"></div>
+          <input type="button" id="btnAgregarRSS" value="+" class="btnInteraccion" />                
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btnCerrarModal" class="btnInteraccion" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" id="btnAgregar" class="btnInteraccion">Agregar RSS('s)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
