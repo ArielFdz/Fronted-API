@@ -51,7 +51,7 @@ $('#btnActualizar').click(function () {
     if (result.isConfirmed) {
       $.ajax({
         url: "https://rssapi-production.up.railway.app/rss",
-        type: 'PATCH',
+        type: 'DELETE',
         success: function (res) {
           if (res == "ya") {
             Swal.fire({
@@ -134,6 +134,7 @@ $('#btnAgregar').click(function () {
         data: jsonData,
         success: function (res) {
           Swal.fire('Se ha añadido el RSS!', '', 'success');
+          window.location.href = "https://arielfdz.github.io/Fronted-API/";
           $(rssInput).attr('aria-invalid', false);
         },
         error: function (response) {
