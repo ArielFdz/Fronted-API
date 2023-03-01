@@ -134,7 +134,19 @@ $('#btnAgregar').click(function () {
         data: jsonData,
         success: function (res) {
           Swal.fire('Se ha añadido el RSS!', '', 'success');
-          window.location.href = "https://arielfdz.github.io/Fronted-API/";
+          Swal.fire({
+            title: 'Se ha añadido el RSS!',
+            background: '#373b69',
+            color: '#fff',
+            allowOutsideClick: false,
+          }).then((result) => {
+            if(result.isConfirmed){
+              setTimeout(function(){location.href="https://arielfdz.github.io/Fronted-API/"} , 2000);
+            }
+          });
+
+             
+          //window.location.href = "https://arielfdz.github.io/Fronted-API/";
           $(rssInput).attr('aria-invalid', false);
         },
         error: function (response) {
