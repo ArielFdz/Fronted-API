@@ -60,7 +60,7 @@ $('#btnActualizar').click(function () {
               color: '#fff',
               allowOutsideClick: false,
             }).then((result) =>{
-              if(res.isConfirmed){
+              if(result.isConfirmed){
                 setTimeout(function(){location.href="https://arielfdz.github.io/Fronted-API/"} , 2000);
               }
             });
