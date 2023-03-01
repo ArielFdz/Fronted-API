@@ -90,9 +90,18 @@ var imagen = "https://static.vecteezy.com/system/resources/previews/010/765/527/
 const mostrarNoticias = (noticias) => {
   main.innerHTML = "";
   noticias.forEach((noticia) => {
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(noticia.html, 'text/html');
+    const imgs = doc.querySelectorAll('img');
     const elementoNoticia = document.createElement("div");
     elementoNoticia.classList.add("noticia");
-    elementoNoticia.innerHTML = '<img src="' + imagen + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</div>';
+    if(imgs.length!=0){      
+      elementoNoticia.innerHTML = '<img src="' + imgs[0].src + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</div>';
+    }else{
+      elementoNoticia.innerHTML = '<img src="' + imagen + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</div>';
+    }
+    
 
     main.appendChild(elementoNoticia);
   });
