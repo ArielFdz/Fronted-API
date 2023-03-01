@@ -1,5 +1,7 @@
 let desde =0;
 
+//-----------------------------------------------------------------------------------------------------------------
+
 $(function () {
 
   $.ajax({
@@ -21,6 +23,8 @@ $(function () {
 
 })
 
+//-----------------------------------------------------------------------------------------------------------------
+
 document.getElementById("search").onsearch = function () { buscar() };
 
 function buscar() {
@@ -37,6 +41,8 @@ function buscar() {
   }
 
 }
+
+//-----------------------------------------------------------------------------------------------------------------
 
 $('#btnActualizar').click(function () {
   Swal.fire({
@@ -55,7 +61,7 @@ $('#btnActualizar').click(function () {
         success: function (res) {
           if (res == "base de datos borrada") {
             Swal.fire({
-              title: 'Se han actualizado las noticias!',
+              title: 'Se han actualizado (borrado) las noticias!',
               background: '#373b69',
               color: '#fff',
               allowOutsideClick: false,
@@ -66,7 +72,7 @@ $('#btnActualizar').click(function () {
             });
           }
           else {
-            Swal.fire('Ocurrió un error al intentar actualizar las noticias!', '', 'info');
+            Swal.fire('Ocurrió un error al intentar actualizar(borrar) las noticias!', '', 'info');
           }
         }
       });
@@ -77,9 +83,10 @@ $('#btnActualizar').click(function () {
 
 });
 
+//-----------------------------------------------------------------------------------------------------------------
+
 var imagen = "https://static.vecteezy.com/system/resources/previews/010/765/527/non_2x/retro-distressed-sticker-of-a-cartoon-newspaper-vector.jpg";
 
-//MOSTRAR EL JSON RECUPERADO
 const mostrarNoticias = (noticias) => {
   main.innerHTML = "";
   noticias.forEach((noticia) => {
@@ -91,17 +98,7 @@ const mostrarNoticias = (noticias) => {
   });
 };
 
-const agregarRSS = () => {
-  const div = document.querySelector("bodyModal");
-  const elementoRRS = document.createElement("input");
-  elementoRRS.classList.add("rss");
-  elementoRRS.id.add("rss");
-  elementoRRS.type.add("text");
-  elementoRRS.placeholder.add("RSS");
-
-  div.appendChild(elementoRRS);
-
-}
+//-----------------------------------------------------------------------------------------------------------------
 
 $('#btnAgregarRSS').click(function () {
   var html = '';
@@ -116,12 +113,9 @@ $('#btnAgregarRSS').click(function () {
 
 $(document).on('click', '#btnQuitarRSS', function () {
   $(this).closest('#inputFormRow').remove();
-  });
+});
 
-/*  $('#btnQuitarRSS').click(function () {
-  
-});*/
-
+//-----------------------------------------------------------------------------------------------------------------
 
 $('#btnAgregar').click(function () {
   var inputs = document.getElementsByName('title[]');
@@ -148,7 +142,6 @@ $('#btnAgregar').click(function () {
               setTimeout(function(){location.href="https://arielfdz.github.io/Fronted-API/"} , 2000);
             }
           });
-
           $(rssInput).attr('aria-invalid', false);
         },
         error: function (response) {
@@ -162,9 +155,7 @@ $('#btnAgregar').click(function () {
           } else {
             Swal.fire("Debe proporcionar una URL existente", '', 'error');
           }
-  
         }
-  
       });
     }else{
       Swal.fire({
@@ -175,13 +166,13 @@ $('#btnAgregar').click(function () {
       });
     }
   }
-
 });
 
 $('#btnCerrarModal').click(function () {
   document.getElementById('rss').value = "";
 });
 
+//-----------------------------------------------------------------------------------------------------------------
 
 document.getElementById("styledSelect1").addEventListener("change", filtroSeleccionado);
 
@@ -198,8 +189,9 @@ function filtroSeleccionado() {
       mostrarNoticias(respuesta);
     }
   });
-
 }
+
+//-----------------------------------------------------------------------------------------------------------------
 
 $('#anterior').click(function () {
 
@@ -227,8 +219,6 @@ $('#anterior').click(function () {
       $(this).css('cursor','not-allowed');
     }); 
   }
-
-  
 });
 
 $('#siguiente').click(function () {
@@ -241,7 +231,6 @@ $('#siguiente').click(function () {
     obj.style.removeProperty("cursor");
   }
   
-
   $.ajax({
     url: 'https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde='+desde+'',
     type: 'GET',
@@ -257,8 +246,6 @@ $('#siguiente').click(function () {
       }
     }
   });
-  
-
 });
 
-
+//-----------------------------------------------------------------------------------------------------------------
