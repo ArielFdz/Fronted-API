@@ -59,11 +59,11 @@ $('#btnActualizar').click(function () {
               background: '#373b69',
               color: '#fff',
               allowOutsideClick: false,
-            }).then{
+            }).then((result) =>{
               if(res.isConfirmed){
                 setTimeout(function(){location.href="https://arielfdz.github.io/Fronted-API/"} , 2000);
               }
-            };
+            });
           }
           else {
             Swal.fire('Ocurrió un error al intentar actualizar las noticias!', '', 'info');
