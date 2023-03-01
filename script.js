@@ -53,7 +53,7 @@ $('#btnActualizar').click(function () {
         url: "https://rssapi-production.up.railway.app/rss",
         type: 'DELETE',
         success: function (res) {
-          if (res == "ya") {
+          if (res == "base de datos borrada") {
             Swal.fire({
               title: 'Se han actualizado las noticias!',
               background: '#373b69',
