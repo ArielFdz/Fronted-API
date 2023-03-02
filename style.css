@@ -19,6 +19,15 @@ h1 a :hover{
   color: var(--secondary-color);;
 }
 
+.noticiasUrl{
+  text-decoration: none;
+  color: #EAF0F6;
+}
+
+.noticiasUrl:hover{
+  color: #970978;
+}
+
 input[aria-invalid='false'] {
   border: 2px solid rgb(153, 255, 0);
 }

@@ -181,9 +181,9 @@ const mostrarNoticias = (noticias) => {
     const elementoNoticia = document.createElement("div");
     elementoNoticia.classList.add("noticia");
     if(imgs.length!=0){      
-      elementoNoticia.innerHTML = '<img src="' + imgs[0].src + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</br><a href="' + noticia.url + '">Leer más...</a></div>';
+      elementoNoticia.innerHTML = '<img src="' + imgs[0].src + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</br><a class="noticiasUrl" href="' + noticia.url + '">Leer más...</a></div>';
     }else{
-      elementoNoticia.innerHTML = '<img src="' + imagen + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</br><a href="' + noticia.url + '">Leer más...</a>'+'</div>';
+      elementoNoticia.innerHTML = '<img src="' + imagen + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</br><a class="noticiasUrl" href="' + noticia.url + '">Leer más...</a>'+'</div>';
     }
     
 
