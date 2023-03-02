@@ -67,6 +67,7 @@ function buscar() {
     filtro.style.display = "none";
   }else{
     filtro.style.display = "block";
+    filtro.value="fecha";
   }
 
   $.each($('a.moveRight'), function(index, value) {
@@ -112,7 +113,9 @@ $('#btnActualizar').click(function () {
         type: 'PATCH',
         success: function (res) {
           loading.style.display = "none";
-          if (res == "ya") {
+          var resp=ajaxActualizar(res);
+          console.log(resp);
+          if (resp == "finalizado") {
             Swal.fire({
               title: 'Se han actualizado las noticias!',
               background: '#373b69',
@@ -136,6 +139,33 @@ $('#btnActualizar').click(function () {
 
 
 });
+
+function ajaxActualizar(noticias){
+  $.ajax({
+    url: "https://rssapi-production.up.railway.app/rss",
+    type: 'DELETE',
+    success: function (res) {
+      noticias.forEach((noticia) =>{
+        ajaxMethodUpdate(noticia);
+      })
+    }
+  });
+  return "finalizado";
+}
+
+function ajaxMethodUpdate(datosRss){
+
+  const jsonData = { "url": datosRss.url };
+
+  $.ajax({
+    url: "https://rssapi-production.up.railway.app/rss",
+    type: 'POST',
+    data: jsonData,
+    success: function (response) {
+      console.log("hecho");
+    },
+  });
+}
 
 //-----------------------------------------------------------------------------------------------------------------
 
