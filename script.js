@@ -1,5 +1,6 @@
 let desde =0;
 let ultimaURL = "";
+let busquedaRealizada = "";
 
 var loading = document.getElementById("loading-overlay");
 loading.style.display = "none";
@@ -9,7 +10,7 @@ loading.style.display = "none";
 $(function () {  
 
   $.ajax({
-    url: "https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde=0",
+    url: "https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde=0&busqueda=",
     type: 'GET',
     data: '',
     success: function (respuesta) {
@@ -25,6 +26,20 @@ $(function () {
     }); 
   }
 
+  $.ajax({
+    url: 'https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde=20&busqueda=',
+    type: 'GET',
+    data: '',
+    success: function (respuesta) {      
+      if(respuesta.length==0){
+        $.each($('a.moveRight'), function(index, value) {
+          $(this).css('pointer-events','none');
+          $(this).css('cursor','not-allowed');
+        });
+      }
+    }
+  });
+
 })
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -33,35 +48,46 @@ document.getElementById("search").onsearch = function () { buscar() };
 
 function buscar() {
   loading.style.display = "block";
-  var busqueda = document.getElementById("search").value;
-  desde=0;
-  var filtro = document.getElementById("styledSelect1").value;
-  var bandera=desde+20;
-  if (busqueda != "") {
-    $.ajax({
-      url: 'https://rssapi-production.up.railway.app/noticias/'+filtro+'?busqueda='+ busqueda+'&limite=20&desde='+desde+'',
-      type: 'GET',
-      success: function (res) {
-        loading.style.display = "none";
-        mostrarNoticias(res);    
-      }
-    });
 
-    $.ajax({
-      url: 'https://rssapi-production.up.railway.app/noticias/fecha?busqueda='+ busqueda+'&limite=20&desde='+bandera+'',
-      type: 'GET',
-      data: '',
-      success: function (respuesta) {  
-        loading.style.display = "none";    
-        if(respuesta.length==0){
-          $.each($('a.moveRight'), function(index, value) {
-            $(this).css('pointer-events','none');
-            $(this).css('cursor','not-allowed');
-          });
-        }
-      }
-    });
+  var busqueda = document.getElementById("search").value;
+  busquedaRealizada=busqueda;
+  desde=0;
+  var filtro = document.getElementById("styledSelect1");
+  var bandera=desde+20;
+  $.ajax({
+    url: 'https://rssapi-production.up.railway.app/noticias/fecha?busqueda='+ busquedaRealizada+'&limite=20&desde='+desde+'',
+    type: 'GET',
+    success: function (res) {
+      loading.style.display = "none";
+      mostrarNoticias(res);    
+    }
+  });
+
+  if(busqueda!=""){
+    filtro.style.display = "none";
+  }else{
+    filtro.style.display = "block";
   }
+
+  $.each($('a.moveRight'), function(index, value) {
+    $(this).css('pointer-events','all');
+    $(this).css('cursor','allowed');
+  });
+
+  $.ajax({
+    url: 'https://rssapi-production.up.railway.app/noticias/fecha?busqueda='+ busquedaRealizada+'&limite=20&desde='+bandera+'',
+    type: 'GET',
+    data: '',
+    success: function (respuesta) {  
+      loading.style.display = "none";    
+      if(respuesta.length==0){
+        $.each($('a.moveRight'), function(index, value) {
+          $(this).css('pointer-events','none');
+          $(this).css('cursor','not-allowed');
+        });
+      }
+    }
+  });
   loading.style.display = "none";
 
 }
@@ -251,16 +277,16 @@ document.getElementById("styledSelect1").addEventListener("change", filtroSelecc
 function filtroSeleccionado() {
   var filtro = document.getElementById("styledSelect1").value;
   desde=0;
-
+  document.getElementById("search").value="";
   $.ajax({
-    url: 'https://rssapi-production.up.railway.app/noticias/'+filtro+'?limite=20&desde=0',
+    url: 'https://rssapi-production.up.railway.app/noticias/'+filtro+'?limite=20&desde='+desde+'&busqueda='+busquedaRealizada+'',
     type: 'GET',
     data: '',
     success: function (respuesta) {
       mostrarNoticias(respuesta);
       $.each($('a.moveRight'), function(index, value) {
-        $(this).css('pointer-events','all');
-        $(this).css('cursor','allowed');
+        $(this).css('pointer-events', 'all');
+        $(this).css('cursor', 'allowed');
       });
     }
   });
@@ -274,7 +300,7 @@ $('#anterior').click(function () {
   if(desde>0){
     desde=desde-20;
     $.ajax({
-      url: 'https://rssapi-production.up.railway.app/noticias/'+filtroSeleccionado+'?limite=20&desde='+desde+'',
+      url: 'https://rssapi-production.up.railway.app/noticias/'+filtroSeleccionado+'?limite=20&desde='+desde+'&busqueda='+busquedaRealizada+'',
       type: 'GET',
       data: '',
       success: function (respuesta) {
@@ -304,12 +330,12 @@ $('#siguiente').click(function () {
 
   if(desde>0){
     var obj = document.getElementById("anterior");
-    obj.style.removeProperty("pointer-events");
-    obj.style.removeProperty("cursor");
+    obj.style.removeProperty("pointer-events", "all");
+    obj.style.removeProperty("cursor", "allowed");
   }
   
   $.ajax({
-    url: 'https://rssapi-production.up.railway.app/noticias/'+filtroSeleccionado+'?limite=20&desde='+desde+'',
+    url: 'https://rssapi-production.up.railway.app/noticias/'+filtroSeleccionado+'?limite=20&desde='+desde+'&busqueda='+busquedaRealizada+'',
     type: 'GET',
     data: '',
     success: function (respuesta) {      
@@ -318,7 +344,7 @@ $('#siguiente').click(function () {
   });
 
   $.ajax({
-    url: 'https://rssapi-production.up.railway.app/noticias/'+filtroSeleccionado+'?limite=20&desde='+bandera+'',
+    url: 'https://rssapi-production.up.railway.app/noticias/'+filtroSeleccionado+'?limite=20&desde='+bandera+'&busqueda='+busquedaRealizada+'',
     type: 'GET',
     data: '',
     success: function (respuesta) {      
