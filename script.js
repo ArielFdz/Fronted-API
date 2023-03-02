@@ -1,8 +1,12 @@
 let desde =0;
+let ultimaURL = "";
+
+var loading = document.getElementById("loading-overlay");
+loading.style.display = "none";
 
 //-----------------------------------------------------------------------------------------------------------------
 
-$(function () {
+$(function () {  
 
   $.ajax({
     url: "https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde=0",
@@ -28,14 +32,17 @@ $(function () {
 document.getElementById("search").onsearch = function () { buscar() };
 
 function buscar() {
+  loading.style.display = "block";
   var busqueda = document.getElementById("search").value;
   desde=0;
+  var filtro = document.getElementById("styledSelect1").value;
   var bandera=desde+20;
   if (busqueda != "") {
     $.ajax({
-      url: 'https://rssapi-production.up.railway.app/noticias/fecha?busqueda='+ busqueda+'&limite=20&desde='+desde+'',
+      url: 'https://rssapi-production.up.railway.app/noticias/'+filtro+'?busqueda='+ busqueda+'&limite=20&desde='+desde+'',
       type: 'GET',
       success: function (res) {
+        loading.style.display = "none";
         mostrarNoticias(res);    
       }
     });
@@ -44,7 +51,8 @@ function buscar() {
       url: 'https://rssapi-production.up.railway.app/noticias/fecha?busqueda='+ busqueda+'&limite=20&desde='+bandera+'',
       type: 'GET',
       data: '',
-      success: function (respuesta) {      
+      success: function (respuesta) {  
+        loading.style.display = "none";    
         if(respuesta.length==0){
           $.each($('a.moveRight'), function(index, value) {
             $(this).css('pointer-events','none');
@@ -54,6 +62,7 @@ function buscar() {
       }
     });
   }
+  loading.style.display = "none";
 
 }
 
@@ -64,30 +73,34 @@ $('#btnActualizar').click(function () {
     title: '¿Quiere actualizar las noticias?',
     background: '#373b69',
     color: '#fff',
+    icon: 'warning',
     showDenyButton: true,
     confirmButtonText: 'Actualizar',
     denyButtonText: `Cancelar`,
     allowOutsideClick: false,
   }).then((result) => {
     if (result.isConfirmed) {
+      loading.style.display = "block";
       $.ajax({
         url: "https://rssapi-production.up.railway.app/rss",
-        type: 'DELETE',
+        type: 'PATCH',
         success: function (res) {
-          if (res == "base de datos borrada") {
+          loading.style.display = "none";
+          if (res == "ya") {
             Swal.fire({
-              title: 'Se han actualizado (borrado) las noticias!',
+              title: 'Se han actualizado las noticias!',
               background: '#373b69',
               color: '#fff',
+              icon: 'success',
               allowOutsideClick: false,
             }).then((result) =>{
               if(result.isConfirmed){
-                setTimeout(function(){location.href="https://arielfdz.github.io/Fronted-API/"} , 2000);
+                setTimeout(function(){location.href="index.html"} , 500);
               }
             });
           }
           else {
-            Swal.fire('Ocurrió un error al intentar actualizar(borrar) las noticias!', '', 'info');
+            Swal.fire('Ocurrió un error al intentar actualizar las noticias!', '', 'error');
           }
         }
       });
@@ -112,9 +125,9 @@ const mostrarNoticias = (noticias) => {
     const elementoNoticia = document.createElement("div");
     elementoNoticia.classList.add("noticia");
     if(imgs.length!=0){      
-      elementoNoticia.innerHTML = '<img src="' + imgs[0].src + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</div>';
+      elementoNoticia.innerHTML = '<img src="' + imgs[0].src + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</br><a href="' + noticia.url + '">Leer más...</a></div>';
     }else{
-      elementoNoticia.innerHTML = '<img src="' + imagen + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</div>';
+      elementoNoticia.innerHTML = '<img src="' + imagen + '" alt="' + noticia.titulo + '"/><div class="noticia-info"><h3>' + noticia.titulo + '</h3><span class="' + noticia.fecha + '">' + noticia.fecha + '</span></div><div class="overview"><h3>Descripción</h3>' + noticia.descripcion + '</br><a href="' + noticia.url + '">Leer más...</a>'+'</div>';
     }
     
 
@@ -127,7 +140,8 @@ const mostrarNoticias = (noticias) => {
 $('#btnAgregarRSS').click(function () {
   var html = '';
   html += '<div id="inputFormRow">';
-  html += '<input type="text" name="title[]" placeholder="Ingrese RSS" class="rss" aria-invalid="true"/> ';
+ // html += '<input type="text" name="title[]" placeholder="Ingrese RSS" class="rss" aria-invalid="true"/> ';
+  html += '<input type="text" name="title[]" placeholder="Ingrese RSS" class="rss"/> ';
   html += '<input type="button" id="btnQuitarRSS" value="-" class="btnInteraccion" />';
   html += '</div>';
 
@@ -141,59 +155,93 @@ $(document).on('click', '#btnQuitarRSS', function () {
 
 //-----------------------------------------------------------------------------------------------------------------
 
+function ajaxMethod(inputValue, rssInput){
+
+  const jsonData = { "url": inputValue };
+
+  $.ajax({
+    url: "https://rssapi-production.up.railway.app/rss",
+    type: 'POST',
+    data: jsonData,
+    success: function (response) {
+      $(rssInput).attr('aria-invalid', false);
+    },
+    error: function (response) {
+      const respuesta = response.responseText;
+      var res = JSON.parse(respuesta);
+
+      $(rssInput).attr('aria-invalid', true);
+
+      if (res.message == inputValue + " no válida por el parser") {
+        $(rssInput).attr('placeholder', "La URL no pertenece a un RSS");
+      } else {
+        $(rssInput).attr('placeholder', "Ningun Campo puede estar vacío");
+      }
+    }
+  });
+}
+
 $('#btnAgregar').click(function () {
+  loading.style.display = "block";
+  ajaxAgregar();
+  setTimeout(verificarDatos, 4000);
+
+
+});
+
+function ajaxAgregar(){
+  var inputs = document.getElementsByName('title[]');
+  $.ajax({
+    url: "https://rssapi-production.up.railway.app/rss",
+    type: 'DELETE',
+    success: function (res) {
+      for (var i = 0; i < inputs.length; i++) {
+        var rssInput = inputs[i];
+        var inputValue = inputs[i].value;
+        ajaxMethod(inputValue, rssInput);
+      }
+    }
+  });
+}
+
+function verificarDatos(){
+  let mensaje="";
   var inputs = document.getElementsByName('title[]');
   for (var i = 0; i < inputs.length; i++) {
-    var rssInput= inputs[i];
-    var inputValue = inputs[i].value;
-    console.log("El valor del input " + (i+1) + " es: " + inputValue);
-    if (inputValue != "") {
-      const jsonData = { "url": inputValue };
-  
-      $.ajax({
-        url: "https://rssapi-production.up.railway.app/rss",
-        type: 'POST',
-        data: jsonData,
-        success: function (res) {
-          Swal.fire({
-            title: 'Se ha añadido el RSS!',
-            background: '#373b69',
-            type: 'success',
-            color: '#fff',
-            allowOutsideClick: false,
-          }).then((result) => {
-            if(result.isConfirmed){
-              setTimeout(function(){location.href="https://arielfdz.github.io/Fronted-API/"} , 2000);
-            }
-          });
-          $(rssInput).attr('aria-invalid', false);
-        },
-        error: function (response) {
-          const respuesta = response.responseText;
-          var res = JSON.parse(respuesta);
-          console.log(res.message);        
-          if (res.message == "La url ya está registrada") {
-            Swal.fire(res.message, '', 'error');
-          } else if (res.message == inputValue + " no válida por el parser") {
-            Swal.fire("La URL no pertenece a un RSS", '', 'error');
-          } else {
-            Swal.fire("Debe proporcionar una URL existente", '', 'error');
-          }
-        }
-      });
-    }else{
-      Swal.fire({
-        title: 'Necesita agregar algun dato(URL)!',
-        background: '#373b69',
-        color: '#fff',
-        icon: 'error',
-      });
+    var input = inputs[i];
+    if (input.getAttribute("aria-invalid") === "true") {
+      mensaje=mensaje +" '"+input.getAttribute("placeholder") +"'";
     }
   }
-});
+  loading.style.display = "none";
+  if(mensaje==""){
+    Swal.fire({
+      title: 'Se ha(n) añadido el(los) RSS!',
+      background: '#373b69',
+      icon: 'success',
+      color: '#fff',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if(result.isConfirmed){
+        setTimeout(function(){location.href="index.html"} , 500);
+      }
+    });
+  }else{
+    Swal.fire({
+      title: mensaje,
+      background: '#373b69',
+      icon: 'error',
+      color: '#fff',
+      allowOutsideClick: false,
+    })
+  }
+
+}
 
 $('#btnCerrarModal').click(function () {
   document.getElementById('rss').value = "";
+  $("#rss").removeAttr('aria-invalid');
+  document.getElementById("nuevoInput").innerHTML="";
 });
 
 //-----------------------------------------------------------------------------------------------------------------
@@ -202,7 +250,6 @@ document.getElementById("styledSelect1").addEventListener("change", filtroSelecc
 
 function filtroSeleccionado() {
   var filtro = document.getElementById("styledSelect1").value;
-  console.log(filtro);
   desde=0;
 
   $.ajax({
@@ -210,8 +257,11 @@ function filtroSeleccionado() {
     type: 'GET',
     data: '',
     success: function (respuesta) {
-      console.log(respuesta);
       mostrarNoticias(respuesta);
+      $.each($('a.moveRight'), function(index, value) {
+        $(this).css('pointer-events','all');
+        $(this).css('cursor','allowed');
+      });
     }
   });
 }
@@ -228,7 +278,6 @@ $('#anterior').click(function () {
       type: 'GET',
       data: '',
       success: function (respuesta) {
-        console.log(respuesta);
         mostrarNoticias(respuesta);
         if(respuesta.length>0){
           var obj = document.getElementById("siguiente");
@@ -248,6 +297,7 @@ $('#anterior').click(function () {
 });
 
 $('#siguiente').click(function () {
+  
   desde=desde+20;
   var bandera=desde+20;
   var filtroSeleccionado = document.getElementById("styledSelect1").value;

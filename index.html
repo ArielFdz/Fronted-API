@@ -17,8 +17,9 @@
 </head>
 
 <body>
+  
   <header>
-    <h1> <b>NOTICIAS RSS</b> </h1>
+    <h1> <a href="index.html"><b>NOTICIAS RSS</b></a> </h1>
     <span>
       <input type="search" placeholder="Search" id="search" class="search" />
       <input type="button" id="btnActualizar" value="Actualizar noticias" class="btnInteraccion" />
@@ -35,7 +36,7 @@
       <option value="titulo">Titulo</option>
     </select>
   </label>
-
+  <div id="loading-overlay"><div id="loader" class="loader"></div></div>
   <main id="main"></main>
   <div id="botones" class="botones">
     <a href="#" class='move moveLeft' id="anterior">Anterior</a> 
@@ -51,8 +52,9 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="bodyModal" >
-          <input type="text" placeholder="Ingrese RSS" id="rss" class="rss" name="title[]" aria-invalid="true"/>
+          <input type="text" placeholder="Ingrese RSS" id="rss" class="rss" name="title[]"/>
           <div id="nuevoInput"></div>
+          <br>
           <input type="button" id="btnAgregarRSS" value="+" class="btnInteraccion" />                
         </div>
         <div class="modal-footer">
