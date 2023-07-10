@@ -1,3 +1,6 @@
+//offset
+let desde =0;
+
 $(function () {  
 
     $.ajax({
@@ -9,6 +12,14 @@ $(function () {
         mostrarNoticias(respuesta);
       }
     });
+
+    if(desde==0){
+      $.each($('a.moveLeft'), function(index, value) {
+        $(this).css('pointer-events','none');
+        $(this).css('cursor','not-allowed');
+      }); 
+    }
+  
   
 })
 
@@ -146,3 +157,66 @@ function buscar() {
 }
 
 //-----------------------------------------------------------------------------------------------------------------
+
+$('#anterior').click(function () {
+
+  if(desde>0){
+    desde=desde-20;
+    $.ajax({
+      url: 'https://rssapi-production.up.railway.app/news/?limit=20&offset='+desde+'',
+      type: 'GET',
+      data: '',
+      success: function (respuesta) {
+        mostrarNoticias(respuesta);
+        if(respuesta.length>0){
+          var obj = document.getElementById("siguiente");
+          obj.style.removeProperty("pointer-events");
+          obj.style.removeProperty("cursor");
+        }
+      }
+    });
+  }
+
+  if(desde==0){
+    $.each($('a.moveLeft'), function(index, value) {
+      $(this).css('pointer-events','none');
+      $(this).css('cursor','not-allowed');
+    }); 
+  }
+});
+
+$('#siguiente').click(function () {
+  
+  desde=desde+20;
+  var bandera=desde+20;
+
+  if(desde>0){
+    var obj = document.getElementById("anterior");
+    obj.style.removeProperty("pointer-events", "all");
+    obj.style.removeProperty("cursor", "allowed");
+  }
+  
+  $.ajax({
+    url: 'https://rssapi-production.up.railway.app/news/?limit=20&offset='+desde+'',
+    type: 'GET',
+    data: '',
+    success: function (respuesta) {      
+      mostrarNoticias(respuesta);
+    }
+  });
+
+  $.ajax({
+    url: 'https://rssapi-production.up.railway.app/news/?limit=20&offset='+bandera+'',
+    type: 'GET',
+    data: '',
+    success: function (respuesta) {      
+      if(respuesta.length==0){
+        $.each($('a.moveRight'), function(index, value) {
+          $(this).css('pointer-events','none');
+          $(this).css('cursor','not-allowed');
+        });
+      }
+    }
+  });
+});
+
