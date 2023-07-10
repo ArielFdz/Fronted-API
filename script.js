@@ -10,7 +10,7 @@ loading.style.display = "none";
 $(function () {  
 
   $.ajax({
-    url: "https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde=0&busqueda=",
+    url: "https://rssapi-production.up.railway.app/rss",
     type: 'GET',
     data: '',
     success: function (respuesta) {
@@ -27,7 +27,7 @@ $(function () {
   }
 
   $.ajax({
-    url: 'https://rssapi-production.up.railway.app/noticias/fecha?limite=20&desde=20&busqueda=',
+    url: 'https://rssapi-production.up.railway.app/rss',
     type: 'GET',
     data: '',
     success: function (respuesta) {      
@@ -213,8 +213,8 @@ $(document).on('click', '#btnQuitarRSS', function () {
 
 function ajaxMethod(inputValue, rssInput){
 
-  const jsonData = { "url": inputValue };
-
+  // const jsonData = { "url": inputValue };
+  const jsonData = { "rss": inputValue };
   $.ajax({
     url: "https://rssapi-production.up.railway.app/rss",
     type: 'POST',
