@@ -25,23 +25,8 @@
       <input type="button" id="btnActualizar" value="Actualizar noticias" class="btnInteraccion" />
       <input type="button" id="btnGuardar" value="Agregar RSS" class="btnInteraccion" data-bs-toggle="modal" data-bs-target="#exampleModal"/>
     </span>
-
   </header>
-
-  <label class="custom-select" for="styledSelect1">
-    <select id="styledSelect1" name="options">
-      <option value="fecha" disabled selected hidden>Filtrar por:</option>
-      <option value="fecha">Fecha</option>
-      <option value="url">Url</option>
-      <option value="titulo">Titulo</option>
-    </select>
-  </label>
-  <div id="loading-overlay"><div id="loader" class="loader"></div></div>
   <main id="main"></main>
-  <div id="botones" class="botones">
-    <a href="#" class='move moveLeft' id="anterior">Anterior</a> 
-    <a href="#" class='move moveRight' id="siguiente">Siguiente</a>
-  </div>
   
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -52,14 +37,11 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="bodyModal" >
-          <input type="text" placeholder="Ingrese RSS" id="rss" class="rss" name="title[]"/>
-          <div id="nuevoInput"></div>
-          <br>
-          <input type="button" id="btnAgregarRSS" value="+" class="btnInteraccion" />                
+          <input type="text" placeholder="Ingrese RSS" id="rss" class="rss" name="title[]"/>              
         </div>
         <div class="modal-footer">
           <button type="button" id="btnCerrarModal" class="btnInteraccion" data-bs-dismiss="modal">Cerrar</button>
-          <button type="button" id="btnAgregar" class="btnInteraccion">Agregar RSS('s)</button>
+          <button type="button" id="btnAgregar" class="btnInteraccion">Agregar RSS</button>
         </div>
       </div>
     </div>
